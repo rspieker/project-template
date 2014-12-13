@@ -8,6 +8,7 @@ var gulp = require('gulp'),
 		src:  'source',
 		dest: 'build'
 	},
+	copyright = 'Konfirm ⓒ ' + (new Date().getFullYear()),
 	node;
 
 
@@ -60,7 +61,7 @@ gulp.task('server', function(){
 });
 
 //  The build process
-gulp.task('build', ['misc', 'images', 'process:style', 'process:script', 'template'], function(){
+gulp.task('build', ['misc', 'images', 'process:style', 'process:script', 'template', 'markdown'], function(){
 });
 
 gulp.task('images', ['svg', 'bitmap'], function(){
@@ -167,7 +168,7 @@ gulp.task('template', function(){
 			removeAttributeQuotes: false
 		}))
 		//  and add our watermark
-		.pipe(plug('replace', /(<!DOCTYPE [^>]+>)/, '$1\n<!-- Konfirm ' + (new Date().getFullYear()) + ' -->\n\n'))
+		.pipe(plug('replace', /(<!DOCTYPE [^>]+>)/, '$1\n<!-- ' + copyright + ' -->\n\n'))
 		.pipe(gulp.dest(target.dest + '/template/'))
 	;
 });
@@ -178,11 +179,11 @@ gulp.task('svg', function(){
 	return gulp.src([
 		target.src + '/public/media/vector/**/*.svg'
 	])
-		.pipe(plug('replace', /(<!DOCTYPE [^>]+>)/, '$1\n<!-- Konfirm ' + (new Date().getFullYear()) + ' -->\n\n'))
+		.pipe(plug('replace', /(<!DOCTYPE [^>]+>)/, '$1\n<!-- ' + copyright + ' -->\n\n'))
 		.pipe(gulp.dest(target.dest + '/public/media/vector/'))
 		.pipe(plug('svgmin'))
 		.pipe(plug('rename', min))
-		.pipe(plug('replace', /^(.*)/, '<!--Konfirm ' + (new Date().getFullYear()) + '-->$1'))
+		.pipe(plug('replace', /^(.*)/, '<!--' + copyright + '-->$1'))
 		.pipe(gulp.dest(target.dest + '/public/media/vector/'))
 		.pipe(plug('raster'))
 		.pipe(plug('rename', function(file){file.basename = file.basename.replace(/\.min/, '-svg');file.extname = '.png';}))
@@ -208,17 +209,25 @@ gulp.task('misc', function(){
 	;
 });
 
+gulp.task('markdown', function(){
+	return gulp.src(target.src + '/**/*.md')
+		.pipe(plug('markdown'))
+		.pipe(gulp.dest(target.dest + '/'))
+	;
+});
+
 //  clean out the destination
 gulp.task('clean', function(done){
 	del([target.dest + '/**'], done);
 });
 
 gulp.task('watch', function(){
-	gulp.watch(['!' + target.src + '/**/*.+(html|js|css|svg)', target.src + '/**'], ['misc']);
+	gulp.watch(['!' + target.src + '/**/*.+(html|js|css|svg|png|gif|jpg)', target.src + '/**'], ['misc']);
 	gulp.watch([target.src + '/**/*.css'], ['process:style']);
 	gulp.watch([target.src + '/**/*.js'], ['process:script']);
 	gulp.watch([target.src + '/**/*.svg'], ['svg']);
 	gulp.watch([target.src + '/**/*.+(gif|png|jpg|jpeg)'], ['bitmap']);
+	gulp.watch([target.src + '/**/*.md'], ['markdown']);
 	gulp.watch([target.src + '/template/**/*.html'], ['template']);
 	gulp.watch([target.src + '/template/**/*.html', 'index.js', 'modules/**/*.js', 'config/**/*.json'], ['server']);
 });
