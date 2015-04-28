@@ -1,10 +1,10 @@
 {
 	//  Slightly more relaxed version of: https://gist.github.com/haschek/2595796
-	//  Crafted for browsers (mostly strict, jQuery and browser environment)
+	//  Crafted for node.js / io.js
 
 	//  Enforcing options
 
-	"curly"         : false,    // Require {} for every new block or scope.
+	"curly"         : true,     // Require {} for every new block or scope.
 	"eqeqeq"        : true,     // Require triple equals i.e. `===`.
 	"forin"         : false,    // Tolerate `for in` loops without `hasOwnPrototype`.
 	"immed"         : true,     // Require immediate invocations to be wrapped in parens e.g. `( function(){}() );`
@@ -16,9 +16,11 @@
 	"plusplus"      : false,    // Prohibit use of `++` & `--`.
 	"regexp"        : false,    // Prohibit `.` and `[^...]` in regular expressions.
 	"undef"         : true,     // Require all non-global variables be declared before they are used.
+	"unused"        : true,     // Require all variables to be actually used.
 	"strict"        : true,     // Require `use strict` pragma in every file.
 	"trailing"      : true,     // Prohibit trailing whitespaces.
-
+	"maxcomplexity" : 6,        // The maximum level of code complexity
+//	"maxstatements" : 10,       // Set the max number of statements allowed per function
 
 	//  Relaxing options
 
@@ -69,8 +71,12 @@
 	"nomen"         : true,     // Prohibit use of initial or trailing underbars in names.
 	"onevar"        : true,     // Allow only one `var` statement per function.
 	"passfail"      : false,    // Stop on first error.
-	"white"         : false,    // Check against strict whitespace and indentation rules.
+	"white"         : true,     // Check against strict whitespace and indentation rules.
 
+
+	//  Deprecated
+	"camelcase"     : true,     // Enforce all variable names to use either camelCase style or UPPER_CASE with underscores.
+	"maxlen"        : 200,      // Enforce the maximum length of a line
 
 	//  Undocumented
 	// [4]: http://www.jshint.com/options/
