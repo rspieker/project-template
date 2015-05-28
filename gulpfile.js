@@ -13,18 +13,19 @@ function remainder(watch) {
 		list = list.concat(watch[key]);
 	});
 
-	return list;
-}
+	return list
+		//  invert the ! (! is removed and added if not present)
+		.map(function(pattern) {
+			return pattern[0] === '!' ? pattern.substr(1) : '!' + pattern;
+		})
+		//  put the ! below anything else
+		.sort(function(a, b) {
+			var mA = +(a[0] === '!'),
+				mB = +(b[0] === '!');
 
-function negate(list) {
-	return list.map(function(pattern) {
-		return pattern[0] === '!' ? pattern.substr(1) : '!' + pattern;
-	}).sort(function(a, b) {
-		var mA = +(a[0] === '!'),
-			mB = +(b[0] === '!');
-
-		return mA < mB ? -1 : +(mA > mB);
-	});
+			return mA < mB ? -1 : +(mA > mB);
+		})
+	;
 }
 
 (function(wanted){
@@ -72,7 +73,7 @@ function negate(list) {
 					//  add the vector task, monitoring and building any vector (.svg) file under source/media/vector
 					.task('vector', watch.vector)
 
-					.task('copy', ['source/**/*'].concat(negate(remainder(watch))))
+					.task('copy', ['source/**/*'].concat(remainder(watch)))
 
 					//  add the server task, monitoring the index.js and every script in lib and restarting the main process
 					.task('server', ['index.js', 'lib/**/*.js'])
