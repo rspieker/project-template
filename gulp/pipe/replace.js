@@ -4,7 +4,6 @@ var through = require('through2');
 
 function replace(data, replacement) {
 	Object.keys(replacement).forEach(function(pattern) {
-		console.log(pattern, replacement[pattern]);
 		data = data.replace(new RegExp(pattern), replacement[pattern]);
 	});
 
