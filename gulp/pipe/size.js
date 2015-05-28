@@ -20,12 +20,14 @@ module.exports = function(stream, devour, list) {
 	return stream
 		.pipe(through.obj(function(chunk, enc, done) {
 
-			gutil.log(
-				'Bytes',
-				gutil.colors.cyan(chunk.path.split(/\//).pop()),
-				':',
-				gutil.colors.green(unit(chunk.contents.length, 1024, ['bytes', 'KB', 'MB', 'GB'], 1))
-			);
+			if (chunk.contents) {
+				gutil.log(
+					'Bytes',
+					gutil.colors.cyan(chunk.path.split(/\//).pop()),
+					':',
+					gutil.colors.green(unit(chunk.contents.length, 1024, ['bytes', 'KB', 'MB', 'GB'], 1))
+				);
+			}
 
 			this.push(chunk);
 			done();
