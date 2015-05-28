@@ -16,15 +16,14 @@ function unit(value, step, units, dec) {
 	return result.toFixed(dec || 2) + list.shift();
 }
 
-module.exports = function(stream, devour, list) {
+module.exports = function(stream) {
 	return stream
 		.pipe(through.obj(function(chunk, enc, done) {
 
 			if (chunk.contents) {
 				gutil.log(
-					'Bytes',
-					gutil.colors.cyan(chunk.path.split(/\//).pop()),
-					':',
+					'File',
+					gutil.colors.cyan(chunk.path.split(/\//).pop()) + ':',
 					gutil.colors.green(unit(chunk.contents.length, 1024, ['bytes', 'KB', 'MB', 'GB'], 1))
 				);
 			}
